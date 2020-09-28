@@ -1,0 +1,38 @@
+{
+  "success_post": {
+    "resultCode": 20,
+    "message": "Your post was successfully submitted."
+  },
+  "success_save": {
+    "resultCode": 21,
+    "message": "You have successfully saved a post."
+  },
+  "success_getSecret": {
+    "resultCode": 22,
+    "message": "Secrets have been successfully retrieved."
+  },
+  "success_getSavedSecrets": {
+    "resultCode": 23,
+    "message": "Saved Secrets have been successfully retrieved."
+  },
+  "secrets_keywords_unsat": {
+    "resultCode": 10,
+    "message": "No secrets that satisfied queried keywords."
+  },
+  "secrets_not_found": {
+    "resultCode": 11,
+    "message": "There are no secrets in the database."
+  },
+  "email_undefined": {
+    "resultCode": 12,
+    "message": "Did not recieve an email."
+  },
+  "fail_post": {
+    "resultCode": 13,
+    "message": "secret was either undefined or empty."
+  },
+  "secret_id_undefined": {
+    "resultCode": 13,
+    "message": "Did not recieve a secret id"
+  }
+}

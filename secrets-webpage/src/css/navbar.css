@@ -1,0 +1,17 @@
+.nav-bar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.nav-link {
+  margin-left: 15px;
+}
+
+.home {
+}
+
+.nav {
+  margin-right: 10px;
+  float: right;
+}

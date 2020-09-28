@@ -1,0 +1,26 @@
+{
+  "success_login": {
+    "resultCode": 20,
+    "message": "User has been successfully logged in."
+  },
+  "success_creation": {
+    "resultCode": 21,
+    "message": "User has been successfully signed up."
+  },
+  "success_update": {
+    "resultCode": 22,
+    "message": "User has been successfully updated."
+  },
+  "invalid_username_password": {
+    "resultCode": 11,
+    "message": "invalid username or password."
+  },
+  "user_exists": {
+    "resultCode": 12,
+    "message": "this email is already registered."
+  },
+  "user_DNE": {
+    "resultCode": 13,
+    "message": "this email is not registered."
+  }
+}

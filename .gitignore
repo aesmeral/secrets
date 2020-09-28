@@ -1,0 +1,12 @@
+
+# ignore all config.json in microservices
+*/config.json
+
+# ignore node modules in all folders
+*/node_modules
+
+# ignore config in front end
+secrets-webpage/src/Config.json
+
+# ignore misc
+ideas.txt
