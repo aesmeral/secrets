@@ -63,7 +63,7 @@ module.exports = {
             .collection(saved_collection)
             .updateOne(
               { email: email },
-              { $addToSet: { saved_secret: new ObjectID(secret_data_id) } }
+              { $addToSet: { saved_secret: ObjectID(secret_data_id) } }
             );
         }
       });
@@ -83,7 +83,7 @@ module.exports = {
           let saved_secrets = response.saved_secret; // else get saved_secret (which is an arry of objects)
           return await client
             .db()
-            .collection(pending_collection) // find all object_id within the array in public_collection
+            .collection(public_collection) // find all object_id within the array in public_collection
             .find({ _id: { $in: saved_secrets } }) // returns all secrets found that has the object_id(s) we're looking for.
             .toArray();
         }
