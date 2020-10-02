@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const queryUtil = require("./util/queries");
 const resultCodes = require("./util/resultCodes.json");
+const validUtility = require("./util/validation");
+
 const cors = require("cors");
 const app = express();
 
@@ -43,19 +45,23 @@ app.post("/postSecret", (req, res) => {
 });
 
 // only users can save a secret, if there is no email in the req.body or req.header then do not process request
-// TODO: Check if user exists in database.
 // else it's okay.
 app.post("/saveSecret", (req, res) => {
   let email = req.body.email;
   let secret_id = req.body.id;
-  if (email === undefined) res.status(200).send(email_undefined);
-  else if (secret_id === undefined) res.status(200).send(secret_id_undefined);
-  else {
-    queryUtil._save_secret(email, secret_id).then((response) => {
-      console.info(`-- ${req.body.id} was successfully saved for ${email} --`);
-      res.status(200).send(success_save);
-    });
-  }
+  validUtility._fetch_email(email).then((response) => {
+    if (response === null) res.status(200).send(email_undefined);
+    else if (secret__id === undefined)
+      res.status(200).send(secret_id_undefined);
+    else {
+      queryUtil._save_secret(email, secret_id).then(() => {
+        console.info(
+          ` --- ${secret_id} was successfully saved for ${email} --`
+        );
+        res.status(200).send(success_save);
+      });
+    }
+  });
 });
 
 // everyone has the ability to view secrets, however.. if there are no secrets with those keywords. then return no secrets
@@ -69,7 +75,8 @@ app.get("/getSecrets", (req, res) => {
       res.status(200).send(secrets_keywords_unsat);
     } else {
       response.forEach((element) => {
-        delete element.user;
+        delete element.posted_by;
+        delete element.approved_by;
       });
       let temp_respond = success_getSecret;
       temp_respond.secrets = response;
@@ -81,22 +88,27 @@ app.get("/getSecrets", (req, res) => {
 // only for users. check if email exists in headers.
 app.get("/getSavedSecrets", (req, res) => {
   let email = req.headers.email;
-  if (email === undefined) {
-    console.log("undefined email");
-    res.status(200).send(email_undefined);
-  } else {
-    queryUtil._get_saved_secret(email).then((response) => {
-      if (response === undefined) res.status(200).send(secrets_not_found);
-      else {
-        let temp_respond = success_getSavedSecrets;
-        response.forEach((element) => {
-          delete element.user;
-        });
-        temp_respond.secrets = response;
-        res.status(200).send(temp_respond);
-      }
-    });
-  }
+  validUtility._fetch_email(email).then((response) => {
+    if (response === null) {
+      console.log(` -- ${email} was not found --`);
+      res.status(200).send(email_undefined);
+    } else {
+      queryUtil._get_saved_secret(email).then((r) => {
+        if (r === undefined) {
+          console.log(` -- secrets was not found in the database -- `);
+          res.status(200).send(secrets_not_found);
+        } else {
+          let temp_respond = success_getSavedSecrets;
+          r.forEach((e) => {
+            delete e.user;
+          });
+          temp_respond.secrets = r;
+          console.log(` -- sending ${email} saved secrets -- `);
+          res.status(200).send(temp_respond);
+        }
+      });
+    }
+  });
 });
 
 module.exports = app;

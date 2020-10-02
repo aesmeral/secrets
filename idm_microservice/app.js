@@ -76,6 +76,7 @@ app.post("/login", (req, res) => {
 
 app.get("/getUser/:email", (req, res) => {
   let response = user_DNE;
+  console.log("incoming request for " + req.params.email);
   queryUtil._existing_user(req.params.email).then((result) => {
     if (result !== null) {
       delete result.password;
