@@ -59,6 +59,7 @@ app.post("/login", (req, res) => {
           securityUtil._compare_password(password, result.password, result.salt)
         ) {
           // we want to create a sessionid
+          console.log(result);
           console.error(`${email} has succesfully logged on.`);
           res.status(200).setHeader("email", email);
           let return_data = success_login;
@@ -71,6 +72,19 @@ app.post("/login", (req, res) => {
       }
     });
   }
+});
+
+app.get("/getUser/:email", (req, res) => {
+  let response = user_DNE;
+  queryUtil._existing_user(req.params.email).then((result) => {
+    if (result !== null) {
+      delete result.password;
+      delete result.salt;
+      response = user_exists;
+      user_exists.data = result;
+    }
+    res.status(200).send(response);
+  });
 });
 
 module.exports = app;

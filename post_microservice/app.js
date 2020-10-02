@@ -43,6 +43,7 @@ app.post("/postSecret", (req, res) => {
 });
 
 // only users can save a secret, if there is no email in the req.body or req.header then do not process request
+// TODO: Check if user exists in database.
 // else it's okay.
 app.post("/saveSecret", (req, res) => {
   let email = req.body.email;
@@ -58,7 +59,7 @@ app.post("/saveSecret", (req, res) => {
 });
 
 // everyone has the ability to view secrets, however.. if there are no secrets with those keywords. then return no secrets
-app.get("/getSecret", (req, res) => {
+app.get("/getSecrets", (req, res) => {
   let keywords = req.query.keywords;
   let email = req.headers.email !== undefined ? req.headers.email : "Anonymous";
   console.info(`--- ${email} requested secrets ---`);
@@ -83,18 +84,19 @@ app.get("/getSavedSecrets", (req, res) => {
   if (email === undefined) {
     console.log("undefined email");
     res.status(200).send(email_undefined);
+  } else {
+    queryUtil._get_saved_secret(email).then((response) => {
+      if (response === undefined) res.status(200).send(secrets_not_found);
+      else {
+        let temp_respond = success_getSavedSecrets;
+        response.forEach((element) => {
+          delete element.user;
+        });
+        temp_respond.secrets = response;
+        res.status(200).send(temp_respond);
+      }
+    });
   }
-  queryUtil._get_saved_secret(email).then((response) => {
-    if (response === undefined) res.status(200).send(secrets_not_found);
-    else {
-      let temp_respond = success_getSavedSecrets;
-      response.forEach((element) => {
-        delete element.user;
-      });
-      temp_respond.secrets = response;
-      res.status(200).send(temp_respond);
-    }
-  });
 });
 
 module.exports = app;
